@@ -1,0 +1,1025 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Flash Force 3D Printing | Precision Additive Manufacturing by Darmigan Baskar</title>
+  <meta name="description" content="High-precision FDM & Multi-color 3D printing services using Flashforge Finder & Bambu Lab A1. Fast prototyping & functional parts in Tamil Nadu, India.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:ital,wght@0,400..700;1,400..700&family=JetBrains+Mono:wght@400;500;600;700&family=Syne:wght@700;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #06070a;
+      --bg-card: rgba(18, 20, 29, 0.7);
+      --bg-card-hover: rgba(26, 30, 44, 0.9);
+      --border: rgba(255, 92, 56, 0.18);
+      --border-subtle: rgba(255, 255, 255, 0.08);
+      --text: #f4f1ea;
+      --text-muted: #9aa0a6;
+      --accent: #ff5c38;
+      --accent-glow: rgba(255, 92, 56, 0.4);
+      --accent-cyan: #00f0ff;
+      --accent-gold: #ffb703;
+      --radius: 16px;
+      --radius-sm: 8px;
+      --font-display: 'Syne', sans-serif;
+      --font-body: 'Instrument Sans', sans-serif;
+      --font-mono: 'JetBrains Mono', monospace;
+      --container: 1240px;
+    }
+
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: var(--font-body);
+      line-height: 1.6;
+      overflow-x: hidden;
+      cursor: default;
+    }
+
+    /* Background 3D Grid Animation */
+    .bg-grid {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background-image:
+        linear-gradient(to right, rgba(255, 92, 56, 0.04) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(255, 92, 56, 0.04) 1px, transparent 1px);
+      background-size: 50px 50px;
+      mask-image: radial-gradient(circle at 50% 50%, black 40%, transparent 80%);
+      -webkit-mask-image: radial-gradient(circle at 50% 50%, black 40%, transparent 80%);
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .ambient-glow {
+      position: fixed;
+      width: 600px;
+      height: 600px;
+      border-radius: 50%;
+      background: radial-gradient(circle, var(--accent-glow) 0%, transparent 70%);
+      filter: blur(100px);
+      pointer-events: none;
+      z-index: 0;
+      opacity: 0.35;
+      transition: transform 0.2s ease-out;
+    }
+
+    .container {
+      width: 100%;
+      max-width: var(--container);
+      margin: 0 auto;
+      padding: 0 24px;
+      position: relative;
+      z-index: 2;
+    }
+
+    /* Header / Nav */
+    header {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 100;
+      background: rgba(6, 7, 10, 0.85);
+      backdrop-filter: blur(16px);
+      border-bottom: 1px solid var(--border-subtle);
+    }
+
+    .nav-inner {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      height: 72px;
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      text-decoration: none;
+      color: var(--text);
+    }
+
+    .logo-badge {
+      width: 38px;
+      height: 38px;
+      background: linear-gradient(135deg, var(--accent), #ff8a65);
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: var(--font-display);
+      font-weight: 800;
+      color: #06070a;
+      box-shadow: 0 0 20px var(--accent-glow);
+    }
+
+    .logo-text {
+      font-family: var(--font-display);
+      font-size: 1.25rem;
+      font-weight: 800;
+      letter-spacing: -0.5px;
+    }
+
+    .logo-text span {
+      color: var(--accent);
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 28px;
+      align-items: center;
+      list-style: none;
+    }
+
+    .nav-links a {
+      color: var(--text-muted);
+      text-decoration: none;
+      font-size: 0.92rem;
+      font-weight: 500;
+      transition: color 0.2s;
+    }
+
+    .nav-links a:hover {
+      color: var(--text);
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      padding: 12px 24px;
+      border-radius: var(--radius-sm);
+      font-family: var(--font-body);
+      font-size: 0.95rem;
+      font-weight: 600;
+      text-decoration: none;
+      cursor: pointer;
+      border: none;
+      transition: all 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, var(--accent) 0%, #ff795b 100%);
+      color: #06070a;
+      box-shadow: 0 4px 20px var(--accent-glow);
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 30px rgba(255, 92, 56, 0.6);
+    }
+
+    .btn-secondary {
+      background: var(--bg-card);
+      color: var(--text);
+      border: 1px solid var(--border-subtle);
+    }
+
+    .btn-secondary:hover {
+      background: var(--bg-card-hover);
+      border-color: var(--accent);
+      transform: translateY(-2px);
+    }
+
+    /* Hero Section */
+    .hero {
+      min-height: 90vh;
+      padding: 140px 0 80px;
+      display: flex;
+      align-items: center;
+    }
+
+    .hero-grid {
+      display: grid;
+      grid-template-columns: 1.15fr 0.85fr;
+      gap: 48px;
+      align-items: center;
+    }
+
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 14px;
+      border-radius: 30px;
+      background: rgba(255, 92, 56, 0.1);
+      border: 1px solid var(--border);
+      font-family: var(--font-mono);
+      font-size: 0.8rem;
+      color: var(--accent);
+      margin-bottom: 24px;
+    }
+
+    .hero-badge .pulse-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--accent);
+      box-shadow: 0 0 10px var(--accent);
+      animation: pulse 2s infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.4; transform: scale(0.8); }
+    }
+
+    h1 {
+      font-family: var(--font-display);
+      font-size: clamp(2.5rem, 5vw, 4.2rem);
+      line-height: 1.05;
+      font-weight: 800;
+      letter-spacing: -1px;
+      margin-bottom: 24px;
+    }
+
+    h1 .gradient-text {
+      background: linear-gradient(135deg, #ffffff 30%, var(--accent) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .hero-p {
+      font-size: 1.15rem;
+      color: var(--text-muted);
+      margin-bottom: 36px;
+      max-width: 540px;
+      line-height: 1.7;
+    }
+
+    .hero-cta-group {
+      display: flex;
+      gap: 16px;
+      flex-wrap: wrap;
+      margin-bottom: 48px;
+    }
+
+    .hero-stats {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
+      padding-top: 32px;
+      border-top: 1px solid var(--border-subtle);
+    }
+
+    .stat-item h4 {
+      font-family: var(--font-mono);
+      font-size: 1.75rem;
+      font-weight: 700;
+      color: var(--text);
+    }
+
+    .stat-item h4 span {
+      color: var(--accent);
+    }
+
+    .stat-item p {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      margin-top: 4px;
+    }
+
+    /* 3D Floating Printer Visual */
+    .printer-hero-card {
+      position: relative;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 24px;
+      backdrop-filter: blur(20px);
+      box-shadow: 0 25px 60px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.1);
+      transform-style: preserve-3d;
+      transition: transform 0.3s ease;
+    }
+
+    .printer-hero-img-wrap {
+      position: relative;
+      border-radius: 12px;
+      overflow: hidden;
+      aspect-ratio: 4/3;
+      background: #000;
+    }
+
+    .printer-hero-img-wrap img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.6s ease;
+    }
+
+    .printer-hero-card:hover .printer-hero-img-wrap img {
+      transform: scale(1.05);
+    }
+
+    .printer-tag-floating {
+      position: absolute;
+      top: 16px;
+      right: 16px;
+      background: rgba(6, 7, 10, 0.85);
+      backdrop-filter: blur(10px);
+      border: 1px solid var(--accent);
+      padding: 6px 12px;
+      border-radius: 20px;
+      font-family: var(--font-mono);
+      font-size: 0.75rem;
+      color: var(--accent);
+    }
+
+    .printer-spec-bar {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 20px;
+      padding-top: 16px;
+      border-top: 1px solid var(--border-subtle);
+      font-family: var(--font-mono);
+      font-size: 0.8rem;
+    }
+
+    .printer-spec-bar span {
+      color: var(--text-muted);
+    }
+
+    .printer-spec-bar strong {
+      color: var(--text);
+    }
+
+    /* Section Global */
+    section {
+      padding: 100px 0;
+      position: relative;
+    }
+
+    .section-header {
+      text-align: center;
+      max-width: 680px;
+      margin: 0 auto 60px;
+    }
+
+    .section-eyebrow {
+      font-family: var(--font-mono);
+      font-size: 0.85rem;
+      color: var(--accent);
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      margin-bottom: 12px;
+      display: inline-block;
+    }
+
+    h2 {
+      font-family: var(--font-display);
+      font-size: clamp(2rem, 3.5vw, 3rem);
+      font-weight: 800;
+      letter-spacing: -0.5px;
+      margin-bottom: 16px;
+    }
+
+    .section-desc {
+      color: var(--text-muted);
+      font-size: 1.05rem;
+    }
+
+    /* Fleet Cards */
+    .fleet-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 32px;
+    }
+
+    .fleet-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius);
+      padding: 32px;
+      backdrop-filter: blur(16px);
+      transition: all 0.4s ease;
+      display: flex;
+      flex-direction: column;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .fleet-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 4px;
+      background: linear-gradient(90deg, var(--accent), transparent);
+      opacity: 0;
+      transition: opacity 0.3s;
+    }
+
+    .fleet-card:hover {
+      border-color: var(--border);
+      transform: translateY(-6px);
+      box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+    }
+
+    .fleet-card:hover::before {
+      opacity: 1;
+    }
+
+    .fleet-img {
+      width: 100%;
+      height: 260px;
+      border-radius: 12px;
+      overflow: hidden;
+      margin-bottom: 24px;
+      background: #000;
+    }
+
+    .fleet-img img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.5s;
+    }
+
+    .fleet-card:hover .fleet-img img {
+      transform: scale(1.06);
+    }
+
+    .fleet-card h3 {
+      font-family: var(--font-display);
+      font-size: 1.75rem;
+      margin-bottom: 12px;
+    }
+
+    .fleet-card p {
+      color: var(--text-muted);
+      font-size: 0.95rem;
+      margin-bottom: 24px;
+      flex-grow: 1;
+    }
+
+    .spec-list {
+      list-style: none;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      padding: 16px;
+      background: rgba(0,0,0,0.3);
+      border-radius: var(--radius-sm);
+      border: 1px solid var(--border-subtle);
+      margin-bottom: 24px;
+    }
+
+    .spec-list li {
+      font-size: 0.85rem;
+      font-family: var(--font-mono);
+    }
+
+    .spec-list li span {
+      color: var(--text-muted);
+      display: block;
+      font-size: 0.75rem;
+    }
+
+    .spec-list li strong {
+      color: var(--text);
+    }
+
+    /* Materials / Capabilities */
+    .materials-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 20px;
+    }
+
+    .material-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-sm);
+      padding: 24px;
+      text-align: center;
+      transition: all 0.3s;
+    }
+
+    .material-card:hover {
+      border-color: var(--accent);
+      background: var(--bg-card-hover);
+      transform: translateY(-4px);
+    }
+
+    .material-icon {
+      font-size: 2.2rem;
+      margin-bottom: 12px;
+      display: inline-block;
+    }
+
+    .material-card h4 {
+      font-family: var(--font-display);
+      font-size: 1.15rem;
+      margin-bottom: 8px;
+    }
+
+    .material-card p {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+    }
+
+    /* Quote Calculator */
+    .quote-box {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 40px;
+      max-width: 860px;
+      margin: 0 auto;
+      box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+    }
+
+    .calculator-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 28px;
+      margin-bottom: 32px;
+    }
+
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .form-group label {
+      font-family: var(--font-mono);
+      font-size: 0.85rem;
+      color: var(--text-muted);
+    }
+
+    .form-control {
+      background: rgba(0,0,0,0.4);
+      border: 1px solid var(--border-subtle);
+      padding: 12px 16px;
+      border-radius: var(--radius-sm);
+      color: var(--text);
+      font-family: var(--font-body);
+      font-size: 0.95rem;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+
+    .form-control:focus {
+      border-color: var(--accent);
+    }
+
+    .calc-summary {
+      background: rgba(255, 92, 56, 0.06);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      padding: 24px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 24px;
+    }
+
+    .calc-price h3 {
+      font-family: var(--font-mono);
+      font-size: 2.2rem;
+      color: var(--accent);
+    }
+
+    .calc-price span {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+    }
+
+    /* Order / Contact Section */
+    .order-section {
+      background: linear-gradient(180deg, transparent 0%, rgba(255, 92, 56, 0.05) 100%);
+      border-top: 1px solid var(--border-subtle);
+    }
+
+    .order-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 48px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 48px;
+      align-items: center;
+    }
+
+    .order-details h3 {
+      font-family: var(--font-display);
+      font-size: 2rem;
+      margin-bottom: 16px;
+    }
+
+    .order-details p {
+      color: var(--text-muted);
+      margin-bottom: 28px;
+    }
+
+    .contact-item-row {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      margin-bottom: 20px;
+    }
+
+    .contact-icon-box {
+      width: 44px;
+      height: 44px;
+      border-radius: 10px;
+      background: rgba(255, 92, 56, 0.1);
+      border: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.2rem;
+      color: var(--accent);
+    }
+
+    .contact-info-text strong {
+      display: block;
+      font-size: 0.95rem;
+      color: var(--text);
+    }
+
+    .contact-info-text span, .contact-info-text a {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      text-decoration: none;
+    }
+
+    .contact-info-text a:hover {
+      color: var(--accent);
+    }
+
+    /* Footer */
+    footer {
+      padding: 48px 0;
+      border-top: 1px solid var(--border-subtle);
+      text-align: center;
+      font-size: 0.9rem;
+      color: var(--text-muted);
+    }
+
+    .footer-links {
+      display: flex;
+      justify-content: center;
+      gap: 24px;
+      margin-bottom: 20px;
+      list-style: none;
+    }
+
+    .footer-links a {
+      color: var(--text-muted);
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+
+    .footer-links a:hover {
+      color: var(--accent);
+    }
+
+    @media (max-width: 900px) {
+      .hero-grid, .fleet-grid, .order-card, .calculator-grid {
+        grid-template-columns: 1fr;
+      }
+      .materials-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+      .nav-links {
+        display: none;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="bg-grid"></div>
+  <div class="ambient-glow" id="glow"></div>
+
+  <!-- Header -->
+  <header>
+    <div class="container">
+      <div class="nav-inner">
+        <a href="#" class="logo">
+          <div class="logo-badge">FF</div>
+          <div class="logo-text">FLASH<span>FORCE</span> 3D</div>
+        </a>
+        <ul class="nav-links">
+          <li><a href="#printers">Equipment</a></li>
+          <li><a href="#materials">Materials</a></li>
+          <li><a href="#quote">Quote Estimator</a></li>
+          <li><a href="#order">Order Now</a></li>
+          <li><a href="profile.html" style="color:var(--accent); font-weight:600;">← Back to Founder Profile</a></li>
+        </ul>
+        <a href="#order" class="btn btn-primary" style="padding: 8px 18px; font-size: 0.85rem;">Get Started</a>
+      </div>
+    </div>
+  </header>
+
+  <!-- Hero -->
+  <section class="hero">
+    <div class="container">
+      <div class="hero-grid">
+        <div>
+          <div class="hero-badge">
+            <span class="pulse-dot"></span>
+            Now Accepting Custom 3D Print Orders
+          </div>
+          <h1>
+            Transforming Ideas Into <br>
+            <span class="gradient-text">Physical Reality</span>
+          </h1>
+          <p class="hero-p">
+            Industrial-grade rapid prototyping & multi-color 3D printing services. Powered by high-precision <strong>Flashforge Finder</strong> and next-gen <strong>Bambu Lab A1</strong> multi-color hardware.
+          </p>
+          <div class="hero-cta-group">
+            <a href="#quote" class="btn btn-primary">Instant Estimate</a>
+            <a href="#order" class="btn btn-secondary">Send Your STL / CAD File</a>
+          </div>
+          <div class="hero-stats">
+            <div class="stat-item">
+              <h4>0.08<span>mm</span></h4>
+              <p>Layer Precision</p>
+            </div>
+            <div class="stat-item">
+              <h4>4<span>+</span></h4>
+              <p>Multi-Color AMS</p>
+            </div>
+            <div class="stat-item">
+              <h4>24<span>h</span></h4>
+              <p>Fast Turnaround</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- 3D Card -->
+        <div class="printer-hero-card" id="heroCard">
+          <div class="printer-tag-floating">Multi-Color AMS Enabled</div>
+          <div class="printer-hero-img-wrap">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/6/68/Bambu_Lab_X1_Carbon_with_AMS_module.jpg" alt="Bambu Lab 3D Printer Multi-Color" loading="lazy">
+          </div>
+          <div class="printer-spec-bar">
+            <div><span>Hardware:</span> <strong>Bambu Lab A1 & Flashforge</strong></div>
+            <div><span>Location:</span> <strong>Avalapalli Hudco, TN</strong></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Fleet Showcase -->
+  <section id="printers">
+    <div class="container">
+      <div class="section-header">
+        <span class="section-eyebrow">// Production Fleet</span>
+        <h2>Precision Machine Lineup</h2>
+        <p class="section-desc">Our dedicated 3D printing workshop is equipped for everything from single-part rapid prototyping to vibrant multi-material functional builds.</p>
+      </div>
+
+      <div class="fleet-grid">
+        <!-- Card 1 -->
+        <div class="fleet-card">
+          <div class="fleet-img">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/c/ca/Filament_Refill_%28Bambu_Lab%29_Step_1.jpg" alt="Flashforge Finder 3D Printer setup" loading="lazy">
+          </div>
+          <h3>Flashforge Finder (Finer Series)</h3>
+          <p>The workhorse for high-detail PLA prototyping, mechanical brackets, architectural scale models, and ultra-smooth consumer test parts.</p>
+          <ul class="spec-list">
+            <li><span>Print Volume</span><strong>140 × 140 × 140 mm</strong></li>
+            <li><span>Layer Height</span><strong>80 – 400 microns</strong></li>
+            <li><span>Nozzle Diameter</span><strong>0.4 mm Precision</strong></li>
+            <li><span>Materials</span><strong>PLA, PLA+, Silk, Wood</strong></li>
+          </ul>
+          <a href="#order" class="btn btn-secondary">Order with Flashforge</a>
+        </div>
+
+        <!-- Card 2 -->
+        <div class="fleet-card">
+          <div class="fleet-img">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/6/68/Bambu_Lab_X1_Carbon_with_AMS_module.jpg" alt="Bambu Lab A1 Multi-Color 3D Printer" loading="lazy">
+          </div>
+          <h3>Bambu Lab A1 Multi-Color</h3>
+          <p>Next-generation high-speed automated multi-material 3D printing. Enables up to 4 seamless colors in a single solid object without assembly or paint.</p>
+          <ul class="spec-list">
+            <li><span>Print Volume</span><strong>256 × 256 × 256 mm</strong></li>
+            <li><span>Max Speed</span><strong>500 mm/s High Speed</strong></li>
+            <li><span>Color Support</span><strong>4-Color Multi-Filament</strong></li>
+            <li><span>Materials</span><strong>PLA, PETG, TPU, ABS</strong></li>
+          </ul>
+          <a href="#order" class="btn btn-primary">Order Multi-Color Print</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Materials -->
+  <section id="materials" style="background: rgba(255, 255, 255, 0.015);">
+    <div class="container">
+      <div class="section-header">
+        <span class="section-eyebrow">// Material Chemistry</span>
+        <h2>Engineering & Aesthetic Filaments</h2>
+        <p class="section-desc">Selected premium filaments engineered for strength, durability, visual finish, and UV resistance.</p>
+      </div>
+
+      <div class="materials-grid">
+        <div class="material-card">
+          <div class="material-icon">💎</div>
+          <h4>PLA+ Pro</h4>
+          <p>High rigidity, exceptional detail, perfect for display figurines, enclosures & aesthetic cases.</p>
+        </div>
+        <div class="material-card">
+          <div class="material-icon">🛡️</div>
+          <h4>PETG Tough</h4>
+          <p>Impact resistant, temperature resilient up to 75°C, moisture and chemical resistant for drone & car parts.</p>
+        </div>
+        <div class="material-card">
+          <div class="material-icon">🎨</div>
+          <h4>Multi-Color Silk</h4>
+          <p>Vibrant lustrous finishes in up to 4 simultaneous shades using Bambu AMS multi-extrusion.</p>
+        </div>
+        <div class="material-card">
+          <div class="material-icon">⚡</div>
+          <h4>TPU Flexible</h4>
+          <p>Rubber-like elasticity for gaskets, shock dampeners, phone bumpers, and wearable robotics.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Instant Quote Estimator -->
+  <section id="quote">
+    <div class="container">
+      <div class="section-header">
+        <span class="section-eyebrow">// Transparent Pricing</span>
+        <h2>Instant Quote Estimator</h2>
+        <p class="section-desc">Get an approximate cost estimate for your 3D printing project based on weight, material, and machine requirements.</p>
+      </div>
+
+      <div class="quote-box">
+        <div class="calculator-grid">
+          <div class="form-group">
+            <label for="materialSelect">Select Filament Material</label>
+            <select id="materialSelect" class="form-control" onchange="calculateQuote()">
+              <option value="4">Standard PLA+ (₹4 / gram)</option>
+              <option value="6">PETG Tough (₹6 / gram)</option>
+              <option value="8">Multi-Color AMS Print (₹8 / gram)</option>
+              <option value="9">TPU Elastic Flexible (₹9 / gram)</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="weightInput">Estimated Weight (Grams)</label>
+            <input type="number" id="weightInput" class="form-control" value="50" min="5" max="2000" oninput="calculateQuote()">
+          </div>
+
+          <div class="form-group">
+            <label for="printerSelect">Printer Preference</label>
+            <select id="printerSelect" class="form-control" onchange="calculateQuote()">
+              <option value="bambu">Bambu Lab A1 (Fast / Multi-color)</option>
+              <option value="flashforge">Flashforge Finder (Precision FDM)</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="infillSelect">Infill Density</label>
+            <select id="infillSelect" class="form-control" onchange="calculateQuote()">
+              <option value="15">15% - Light Decorative</option>
+              <option value="30">30% - Standard Functional</option>
+              <option value="60">60% - High Strength</option>
+              <option value="100">100% - Solid Engineering Part</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="calc-summary">
+          <div>
+            <span style="font-size: 0.85rem; color: var(--text-muted);">Estimated Project Cost:</span>
+            <div class="calc-price">
+              <h3 id="estimatedTotal">₹250</h3>
+            </div>
+            <span style="font-size: 0.78rem; color: var(--text-muted);">*Final cost confirmed after slicing CAD / STL file.</span>
+          </div>
+          <button class="btn btn-primary" onclick="proceedToOrder()">Order with This Estimate</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Order / Connect Section -->
+  <section id="order" class="order-section">
+    <div class="container">
+      <div class="order-card">
+        <div class="order-details">
+          <h3>Ready to Start Your 3D Print?</h3>
+          <p>Send your 3D design files (.STL, .OBJ, .STEP, .3MF) directly via email or message. I will slice the model, send you a 3D preview render, and confirm the exact delivery timeline.</p>
+
+          <div class="contact-item-row">
+            <div class="contact-icon-box">📧</div>
+            <div class="contact-info-text">
+              <strong>Email Orders</strong>
+              <a href="mailto:darmiganbaskar@gmail.com?subject=3D%20Print%20Order%20Quote%20Request&body=Hi%20Darmigan%2C%0A%0AI%20would%20like%20to%20place%20a%203D%20printing%20order%20with%20Flash%20Force.%0A%0AProject%20Details%3A%0A-%20File%20Attached%3A%20%5BYES%2FNO%5D%0A-%20Material%20Preferred%3A%20%5BPLA%20%2F%20PETG%20%2F%20Multi-Color%20Bambu%20A1%20%2F%20TPU%5D%0A-%20Quantity%3A%20%0A-%20Delivery%20Location%3A%20%0A%0AThank%20you!">darmiganbaskar@gmail.com</a>
+            </div>
+          </div>
+
+          <div class="contact-item-row">
+            <div class="contact-icon-box">📍</div>
+            <div class="contact-info-text">
+              <strong>Studio Location</strong>
+              <span>Avalapalli Hudco, Hosur / Tamil Nadu, India</span>
+            </div>
+          </div>
+
+          <div class="contact-item-row">
+            <div class="contact-icon-box">📸</div>
+            <div class="contact-info-text">
+              <strong>Instagram Profile</strong>
+              <a href="https://www.instagram.com/darmiganbaskar/" target="_blank">@darmiganbaskar (Darmigan Baskar)</a>
+            </div>
+          </div>
+        </div>
+
+        <div style="background: rgba(0,0,0,0.4); padding: 32px; border-radius: 12px; border: 1px solid var(--border-subtle);">
+          <h4 style="font-family: var(--font-display); font-size: 1.3rem; margin-bottom: 16px;">Quick Order Dispatch</h4>
+          <p style="font-size: 0.88rem; color: var(--text-muted); margin-bottom: 24px;">Clicking the button below opens Gmail automatically with pre-filled order details ready for your STL attachment.</p>
+
+          <a id="gmailDirectBtn" href="https://mail.google.com/mail/?view=cm&fs=1&to=darmiganbaskar@gmail.com&su=3D%20Printing%20Order%20-%20Flash%20Force&body=Hi%20Darmigan%2C%0A%0AI%20am%20interested%20in%203D%20printing%20services%20with%20Flash%20Force.%0A%0AOrder%20Details%3A%0A-%20Material%3A%20PLA%20%2F%20PETG%20%2F%20Multi-Color%0A-%20Printer%3A%20Bambu%20Lab%20A1%20%2F%20Flashforge%0A-%20Estimated%20Weight%3A%2050g%0A-%20Comments%3A%20%0A%0AAttached%20is%20my%203D%20file." target="_blank" class="btn btn-primary" style="width: 100%; text-align: center; margin-bottom: 12px;">
+            🚀 Open in Gmail & Send Order
+          </a>
+
+          <a href="mailto:darmiganbaskar@gmail.com" class="btn btn-secondary" style="width: 100%; text-align: center;">
+            ✉️ Default Mail Client
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer>
+    <div class="container">
+      <ul class="footer-links">
+        <li><a href="profile.html">Founder Profile</a></li>
+        <li><a href="https://www.linkedin.com/in/darmigan-baskar-44285a3b4" target="_blank">LinkedIn</a></li>
+        <li><a href="https://www.instagram.com/darmiganbaskar/" target="_blank">Instagram (@darmiganbaskar)</a></li>
+        <li><a href="https://github.com/darmigan2011-ops/-personal-profile-for-my-business-" target="_blank">GitHub Repo (Download ZIP)</a></li>
+      </ul>
+      <p>© <span id="year"></span> Flash Force 3D Printing by <strong>Darmigan Baskar</strong>. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <script>
+    document.getElementById('year').textContent = new Date().getFullYear();
+
+    // Mouse Glow Follow
+    const glow = document.getElementById('glow');
+    window.addEventListener('mousemove', (e) => {
+      glow.style.transform = `translate(${e.clientX - 300}px, ${e.clientY - 300}px)`;
+    });
+
+    // 3D Tilt for Hero Card
+    const heroCard = document.getElementById('heroCard');
+    if (heroCard) {
+      document.addEventListener('mousemove', (e) => {
+        const x = (e.clientX / window.innerWidth) - 0.5;
+        const y = (e.clientY / window.innerHeight) - 0.5;
+        heroCard.style.transform = `perspective(1000px) rotateY(${x * 15}deg) rotateX(${-y * 15}deg)`;
+      });
+    }
+
+    // Quote Calculation
+    function calculateQuote() {
+      const rate = parseFloat(document.getElementById('materialSelect').value) || 4;
+      const weight = parseFloat(document.getElementById('weightInput').value) || 50;
+      const setupFee = 50;
+      const total = Math.round((rate * weight) + setupFee);
+      document.getElementById('estimatedTotal').textContent = '₹' + total;
+
+      // Update Gmail Link Body
+      const materialText = document.getElementById('materialSelect').options[document.getElementById('materialSelect').selectedIndex].text;
+      const printerText = document.getElementById('printerSelect').options[document.getElementById('printerSelect').selectedIndex].text;
+
+      const gmailBtn = document.getElementById('gmailDirectBtn');
+      const bodyText = `Hi Darmigan,%0A%0AI would like to place an order with Flash Force 3D Printing.%0A%0AEstimated Quote Details:%0A- Material: ${encodeURIComponent(materialText)}%0A- Estimated Weight: ${weight}g%0A- Preferred Hardware: ${encodeURIComponent(printerText)}%0A- Estimated Total: ₹${total}%0A%0AI have attached my STL/CAD file for slicing.`;
+      gmailBtn.href = `https://mail.google.com/mail/?view=cm&fs=1&to=darmiganbaskar@gmail.com&su=3D%20Printing%20Order%20Estimate%20₹${total}&body=${bodyText}`;
+    }
+
+    function proceedToOrder() {
+      document.getElementById('order').scrollIntoView({ behavior: 'smooth' });
+    }
+
+    calculateQuote();
+  </script>
+</body>
+</html>
