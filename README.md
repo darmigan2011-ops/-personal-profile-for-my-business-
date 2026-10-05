@@ -1,12 +1,20 @@
 # Darmigan Baskar — Personal Site
 
-A five-page personal portfolio: Home, Work, Projects, 3D Printing, and Contact.
+A personal portfolio with Home, Work, Projects, 3D Printing, Contact, and four static project detail pages.
 
 ## Website
 
 https://darmigan2011-ops.github.io/-personal-profile-for-my-business-/
 
 The site features a cinematic portrait hero, interactive Three.js sculptures, scroll reveals, project filters, keyboard-accessible dialogs, responsive navigation, and a 3D printing layer study.
+
+## Search and sharing
+
+Each public page has a unique title and description, an absolute canonical URL, Open Graph/card metadata, and truthful Person, Organization, WebSite, and page structured data. `sitemap.xml` lists nine canonical URLs. Old `profile.html` and `flashforce3d.html` entry points use immediate HTML redirects and destination canonicals. Portraits use responsive AVIF/WebP and the 3D module is bundled and minified. Project details and navigation remain accessible without JavaScript.
+
+Search Console verification, Google indexing, Business Profile eligibility, and actual enquiry counts require the owner's Google account and business evidence; publishing this build alone does not establish those results.
+
+The `portfolio:interaction` browser event provides an analytics adapter hook for email/source clicks, email-copy actions, project previews, print enquiry clicks, and draft preparation. It excludes names, email addresses, and message contents. No remote analytics provider is configured. A prepared draft is not a sent enquiry.
 
 ## Hosting
 

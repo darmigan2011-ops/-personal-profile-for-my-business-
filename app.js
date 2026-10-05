@@ -1,4 +1,9 @@
 (() => {
+  // Adapter hook for an analytics provider. No form content or personal data is emitted.
+  const track=(name,details={})=>window.dispatchEvent(new CustomEvent('portfolio:interaction',{detail:{name,page:location.pathname,...details}}));
+  document.querySelectorAll('a[href^="mailto:"]').forEach(link=>link.addEventListener('click',()=>track('email_click')));
+  document.querySelectorAll('a[href^="https://github.com"]').forEach(link=>link.addEventListener('click',()=>track('source_click')));
+  document.querySelectorAll('a[href*="interest=printing"]').forEach(link=>link.addEventListener('click',()=>track('print_enquiry_click')));
   const motion=matchMedia('(prefers-reduced-motion: reduce)');
   const header=document.querySelector('.site-header');
   const progress=document.querySelector('.scroll-progress');
@@ -34,7 +39,7 @@
   const toast=document.querySelector('.toast');let toastTimer;
   function notify(message){toast.textContent=message;toast.classList.add('show');clearTimeout(toastTimer);toastTimer=setTimeout(()=>toast.classList.remove('show'),3500);}
   document.querySelectorAll('[data-copy]').forEach(button=>button.addEventListener('click',async()=>{
-    try{await navigator.clipboard.writeText(button.dataset.copy);notify('Email address copied');}
+    try{await navigator.clipboard.writeText(button.dataset.copy);notify('Email address copied');track('email_copy');}
     catch{notify('Email: '+button.dataset.copy);}
   }));
 
@@ -47,6 +52,7 @@
     document.querySelector('#project-detail').textContent=project.detail;
     document.querySelector('#project-status').textContent=project.status+' / '+project.tag;
     document.querySelector('#project-source').href='https://github.com/darmigan2011-ops/'+project.repo;
+    document.querySelector('#project-page').href=project.page;track('project_preview',{project:project.id});
     dialog.showModal();document.body.classList.add('modal-open');
   }));
   document.querySelector('.project-close').addEventListener('click',()=>dialog.close());
@@ -77,7 +83,7 @@
       const fallback=document.querySelector('#draft-link');
       fallback.href=`https://mail.google.com/mail/?view=cm&fs=1&to=${email}&su=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
       fallback.hidden=false;
-      form.dataset.draft=mailto;
+      form.dataset.draft=mailto;track('email_draft_prepared',{interest:form.elements.interest.value});
       document.querySelector('.form-result').textContent='Your draft is ready. Review it in your email app, or use Gmail below. Nothing has been sent.';
       location.href=mailto;
     });
@@ -86,9 +92,9 @@
   const shells=[...document.querySelectorAll('[data-scene]')];
   async function loadScene(shell){
     if(shell.dataset.loaded)return;shell.dataset.loaded='true';
-    try{const {createScene}=await import('./scene.js');createScene(shell);}
+    try{const {createScene}=await import('./scene.js');await createScene(shell);}
     catch(error){shell.dataset.error=error.message;shell.querySelector('.scene-bottom').hidden=true;shell.querySelector('.scene-controls')?.setAttribute('hidden','');console.warn('3D unavailable; static artwork retained.',error.message);}
   }
-  if('IntersectionObserver' in window){const sceneObserver=new IntersectionObserver(entries=>entries.forEach(entry=>{if(entry.isIntersecting){loadScene(entry.target);sceneObserver.unobserve(entry.target);}}),{rootMargin:'200px'});shells.forEach(shell=>sceneObserver.observe(shell));}
+  if('IntersectionObserver' in window){const sceneObserver=new IntersectionObserver(entries=>entries.forEach(entry=>{if(entry.isIntersecting){loadScene(entry.target);sceneObserver.unobserve(entry.target);}}),{rootMargin:'0px'});shells.forEach(shell=>sceneObserver.observe(shell));}
   else shells.forEach(loadScene);
 })();
